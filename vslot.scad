@@ -9,10 +9,11 @@ yExtrusionLength = 70;
 yEndClosed = true;
 zExtrusionWidthSections = 2;
 zExtrusionDepthSections = 1;
-zExtrusionLength = 70;
-zEndClosed = true;
+zExtrusionLength = 90;
+zEndClosed = false;
+xyPlaneOffset = 20;
 tolerance=0.8;
-lengthHoleSpacing=30;
+lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;
 sectionWidth=20;
@@ -60,7 +61,8 @@ else {
         zExtrusionLength = zExtrusionLength,
         zEndClosed = zEndClosed,
         tolerance = tolerance,
-        lengthHoleSpacing = lengthHoleSpacing
+        lengthHoleSpacing = lengthHoleSpacing,
+        xyPlaneOffset = xyPlaneOffset
     );
 }
 
@@ -174,6 +176,7 @@ module ThreeCornerVslot(
     zEndClosed = true,
     tolerance=0.8,
     lengthHoleSpacing = 20,
+    xyPlaneOffset = 20
 )
 {
     xEndOffset = 
@@ -188,7 +191,7 @@ module ThreeCornerVslot(
     
     difference() {
         hull() { 
-            linear_extrude(height=zExtrusionLength)
+            translate ([0,0,-xyPlaneOffset])linear_extrude(height=zExtrusionLength)
                 square([
                     sectionWidth*zExtrusionWidthSections+wallWidth*2,
                     sectionWidth*zExtrusionDepthSections+wallWidth*2
@@ -212,7 +215,7 @@ module ThreeCornerVslot(
                 ]);
         };
         
-        translate([wallWidth, wallWidth, zEndOffset]) {
+        translate([wallWidth, wallWidth, zEndOffset-xyPlaneOffset]) {
             linear_extrude(height=zExtrusionLength-zEndOffset)
             VSlot2dProfile(
                 sectionCountWidth=zExtrusionWidthSections, 
