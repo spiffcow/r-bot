@@ -12,7 +12,7 @@ zExtrusionDepthSections = 1;
 zExtrusionLength = 90;
 zEndClosed = false;
 xyPlaneOffset = 20;
-tolerance=0.8;
+oversize = 0.8;
 lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;
@@ -31,7 +31,7 @@ if (testPiece) {
                 sectionCountWidth=zExtrusionWidthSections, 
                 sectionCountDepth=zExtrusionDepthSections,
                 indentHeight=vslotIndentHeight,
-                tolerance=tolerance
+                oversize=oversize
             );
         };  
         negativeSpaceHoles(
@@ -60,7 +60,7 @@ else {
         zExtrusionDepthSections = zExtrusionDepthSections,
         zExtrusionLength = zExtrusionLength,
         zEndClosed = zEndClosed,
-        tolerance = tolerance,
+        oversize = oversize,
         lengthHoleSpacing = lengthHoleSpacing,
         xyPlaneOffset = xyPlaneOffset
     );
@@ -76,26 +76,31 @@ module extrusionIndent(_indentWidthInside, _indentWidthOutside, _indentHeight) {
 };
 
 module VSlot2dProfile(
-    extrusionLength = 50,
+    extrusionLength,
     sectionWidth = 20,
     indentWidthOutside = 9,
     indentWidthInside = 7,
     indentHeight = 1,
-    sectionCountWidth = 3,
-    sectionCountDepth = 1,
+    sectionCountWidth,
+    sectionCountDepth,
     topIndent = true,
     bottomIndent = true,
     leftIndent = true,
     rightIndent = true,
-    tolerance = 0.8
+    oversize = 0
 )
 {
-    translate([-tolerance/2,-tolerance/2,0]) difference() {
+    translate([-oversize/2,-oversize/2,-oversize/2])
+    resize([
+        sectionWidth*sectionCountWidth+oversize,
+        sectionWidth*sectionCountDepth+oversize,
+        extrusionLength+oversize
+    ]) difference() {
         
             square(
                 size=[
-                    sectionWidth*sectionCountWidth+tolerance, 
-                    sectionWidth*sectionCountDepth+tolerance
+                    sectionWidth*sectionCountWidth, 
+                    sectionWidth*sectionCountDepth
                 ]
             );
         for(i = [0:sectionCountWidth]) {
@@ -108,7 +113,7 @@ module VSlot2dProfile(
             if (topIndent)
                 translate([
                     i * sectionWidth + (sectionWidth-indentWidthOutside)/2, 
-                    sectionWidth*sectionCountDepth+tolerance, 
+                    sectionWidth*sectionCountDepth, 
                     0
                 ])
                 rotate([180,0,0])
@@ -124,7 +129,7 @@ module VSlot2dProfile(
             // right side inden
             if (rightIndent)
                 translate([
-                    sectionWidth*sectionCountWidth + tolerance, 
+                    sectionWidth*sectionCountWidth, 
                     i * sectionWidth + (sectionWidth-indentWidthOutside)/2, 
                     0
                 ])
@@ -134,14 +139,26 @@ module VSlot2dProfile(
     }
 };
 
+
+module negativeSpaceHole(
+    largeHoleHeight = 1,
+    fullIndentHeight = 6,
+    largeHoleRadius = 5,
+    smallHoleRadius = 2.5,
+    )
+{ 
+    cylinder(h=largeHoleHeight,r=largeHoleRadius,center=false, $fn=90);
+    cylinder(h=fullIndentHeight,r=smallHoleRadius,center=false, $fn=90);
+}
+
 module negativeSpaceHoles(
     largeHoleIndent = 1,
     largeHoleRadius = 5,
     smallHoleRadius = 2.5,
     widthHoleSpacing = 20,
+    fullIndentHeight,
     lengthHoleSpacing,
     extrusionLength,
-    fullIndentHeight,
     firstIndentOffset,
     widthSections
     ) 
@@ -151,8 +168,11 @@ module negativeSpaceHoles(
         for (s = [firstIndentOffset+widthHoleSpacing/2:widthHoleSpacing:widthHoleSpacing*widthSections]) {
             translate([s,0,0])
             rotate([-90,0,0]) {
-                cylinder(h=largeHoleIndent,r=largeHoleRadius,center=false, $fn=90);
-                cylinder(h=fullIndentHeight,r=smallHoleRadius,center=false, $fn=90);
+                negativeSpaceHole(
+                    largeHoleHeight=largeHoleIndent,
+                    fullIndentHeight=fullIndentHeight,
+                    largeHoleRadius=largeHoleRadius,
+                    smallHoleRadius=smallHoleRadius);
             };
         }
     };
@@ -174,9 +194,9 @@ module ThreeCornerVslot(
     zExtrusionDepthSections = 2,
     zExtrusionLength = 70,
     zEndClosed = true,
-    tolerance=0.8,
     lengthHoleSpacing = 20,
-    xyPlaneOffset = 20
+    xyPlaneOffset = 20,
+    oversize = 0.8
 )
 {
     xEndOffset = 
@@ -221,7 +241,7 @@ module ThreeCornerVslot(
                 sectionCountWidth=zExtrusionWidthSections, 
                 sectionCountDepth=zExtrusionDepthSections,
                 indentHeight=vslotIndentHeight,
-                tolerance=tolerance
+                oversize=oversize
             );
         };  
         negativeSpaceHoles(
@@ -239,7 +259,7 @@ module ThreeCornerVslot(
                     sectionCountWidth=xExtrusionWidthSections, 
                     sectionCountDepth=xExtrusionDepthSections,
                     indentHeight=vslotIndentHeight,
-                    tolerance=tolerance
+                    oversize=oversize
                 );
             negativeSpaceHoles(
                 extrusionLength=xExtrusionLength,
@@ -272,7 +292,7 @@ module ThreeCornerVslot(
                     sectionCountWidth=yExtrusionWidthSections, 
                     sectionCountDepth=yExtrusionDepthSections,
                     indentHeight=vslotIndentHeight,
-                    tolerance=tolerance
+                    oversize=oversize
                 );             
             };
         };
