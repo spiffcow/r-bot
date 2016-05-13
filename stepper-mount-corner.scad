@@ -2,7 +2,7 @@ use <vslot.scad>;
 
 profileSize=20;
 sectionCountWidth = 2;
-sectionCountDepth = 2;
+sectionCountDepth = 1;
 extrusionWidth=profileSize*sectionCountWidth;
 extrusionDepth=profileSize*sectionCountDepth;
 nema17Width = 42.3;
@@ -16,6 +16,7 @@ wallSpacing=5;
 m3HoleRadius = 3.1/2;
 tolerance=0.8;
 vslotIndentHeight = 1;
+forwardExtrudeMultiplier = 2.5;
 
 module drawVslotExtrusion(
     height, 
@@ -83,10 +84,9 @@ module drawVslotExtrusion(
     */
 }
 module drawExtrusions(
+    oversize=0,
     extrudeOffsetVal = 0, 
     disableIndents=false, 
-    oversize=0, 
-    printVertical = true,
     withHoles=false) 
 {
     module drawExtrusion(
@@ -108,7 +108,7 @@ module drawExtrusions(
             bottomIndent= bottomIndent && !disableIndents,
             leftIndent=leftIndent && !disableIndents,
             rightIndent=rightIndent && !disableIndents,
-            oversize=extrudeOffsetVal*2,
+            oversize=oversize,
             leftScrewPoints = leftScrewPoints,
             rightScrewPoints = rightScrewPoints,
             topScrewPoints = topScrewPoints,
@@ -119,9 +119,14 @@ module drawExtrusions(
         extrusionWidthPoints = withHoles 
             ? [for (x = [profileSize/2:profileSize:extrusionWidth]) x] 
             : [];
+        extrusionDepthPoints = withHoles 
+            ? [for (x = [profileSize/2:profileSize:extrusionDepth]) x] 
+            : [];
         drawExtrusion(
             height=extrusionWidth, 
-            topScrewPoints=extrusionWidthPoints
+            topScrewPoints=extrusionWidthPoints,
+            bottomScrewPoints=extrusionWidthPoints,
+            rightIndent=false
         );
         translate([0,0,extrusionWidth])
             drawExtrusion(
@@ -133,21 +138,28 @@ module drawExtrusions(
         translate([extrusionWidth,0,2*extrusionWidth]) rotate([0,90,0])  
             drawExtrusion(
                 height=extrusionWidth, 
-                leftIndent=!printVertical,
-                , 
-                topScrewPoints=extrusionWidthPoints
+                topScrewPoints=extrusionWidthPoints,
+                bottomScrewPoints=extrusionWidthPoints
            );
         translate([0,-extrudeOffsetVal,2*extrusionWidth]) rotate(-[90,90,0]) {
             // first do the short portion over the top with no indent
-            drawExtrusion(height=extrusionDepth+extrudeOffsetVal, rightIndent=!printVertical, leftIndent=false); 
+            drawExtrusion(height=extrusionDepth+extrudeOffsetVal, leftIndent=false, topIndent=false,
+                topScrewPoints=extrusionDepthPoints); 
             // ... then do the rest
             translate([0,0,extrusionDepth])
-                drawExtrusion(height=1.5*extrusionDepth, rightIndent=!printVertical);
+                drawExtrusion(height=(forwardExtrudeMultiplier-1)*extrusionDepth, topIndent=false, topScrewPoints=extrusionDepthPoints);
     }
 }
 
-module drawNema17(extrudeOffsetVal=0, nemaZOffset=-2, drawHoles=false) {
+module drawNema17(extrudeOffsetVal=0, nemaZOffset, drawHoles=false, isLeft=true) {
     nema17BoltOffset = (nema17Width - nema17BoltSpacing)/2;
+    
+    // from Carl Feniak's drawing
+    nema17BeltHoleCenterOffsetX = 0;
+    nema17BeltHoleCenterOffsetZ = wallSpacing + 9;
+    nema17BeltHoleWidth = 16;
+    nema17BeltHoleHeight = 8;
+        
     
     translate([0, -wallSpacing - nema17Width, nemaZOffset])
     {
@@ -169,58 +181,102 @@ module drawNema17(extrudeOffsetVal=0, nemaZOffset=-2, drawHoles=false) {
                     linear_extrude(height=extrusionWidth+wallSpacing)
                     circle(r=m3HoleRadius, center=true);
             }
+            // belt hole
+            translate([
+                wallSpacing+nema17Width/2 + nema17BeltHoleCenterOffsetX, 
+                wallSpacing+nema17Width,
+                nema17Height+nema17BeltHoleCenterOffsetZ
+            ]) cube([
+                nema17BeltHoleWidth, 
+                4*extrusionDepth + 2*wallSpacing,
+                nema17BeltHoleHeight
+                ], center=true);
+                
         }
     }
 }
 
 wallSpacing=5;
 nema17Height=2.5*extrusionWidth;
-nema17Offset = -2;
+nemaZOffset = -4;
 
-//rotate([0,-90,0]) 
-difference() {
-    union() {
-            
-        translate([(sectionCountDepth-1)*profileSize,0,0])
-        hull() {
-            translate([-wallSpacing,0, wallSpacing + nema17Offset])
-                linear_extrude(height=wallSpacing)
-                square([nema17Width+wallSpacing,0.001], center=false);
-            
-            translate([-wallSpacing, -nema17Width - wallSpacing, nema17Height + nema17Offset])
-                linear_extrude(height=wallSpacing)
-                square([nema17Width+wallSpacing,nema17Width+wallSpacing], center=false);
+rotate([0,-90,0]) {
+    difference() {
+        union() {
+                
+            translate([(sectionCountDepth-1)*profileSize,0,0])
+            hull() {
+                translate([-wallSpacing,0, wallSpacing + nemaZOffset])
+                    linear_extrude(height=wallSpacing)
+                    square([nema17Width+wallSpacing,0.001], center=false);
+                
+                translate([-wallSpacing, -nema17Width - wallSpacing, nema17Height + nemaZOffset])
+                    linear_extrude(height=wallSpacing)
+                    square([nema17Width+wallSpacing,nema17Width+wallSpacing], center=false);
+            }
+            hull() {
+                drawExtrusions(
+                    extrudeOffsetVal=wallSpacing, 
+                    oversize=wallSpacing*2,
+                    disableIndents=true);  
+                /*
+                drawNema17(
+                    extrudeOffsetVal=wallSpacing, 
+                    nemaZOffset=extrusionWidth-2, 
+                    nema17Height=1.5*extrusionWidth);
+                */
+            } 
         }
-        hull() {
-            drawExtrusions(
-                extrudeOffsetVal=wallSpacing, 
-                disableIndents=true);  
-            /*
+        //color ("red", .5) 
+            drawExtrusions(extrudeOffsetVal=tolerance, withHoles=true);
+        //color ("green", .5) 
+            translate([(sectionCountDepth-1)*profileSize,0,0])
             drawNema17(
-                extrudeOffsetVal=wallSpacing, 
-                nemaZOffset=extrusionWidth-2, 
-                nema17Height=1.5*extrusionWidth);
-            */
-        } 
+                nemaZOffset=nemaZOffset, 
+                nema17Height=nema17Height,
+                drawHoles=true);
+    };
+    
+    // hack to make a thin layer to avoid having to use supports
+    //translate([extrusionDepth-0.1,-wallSpacing,2*extrusionWidth]) 
+    //cube([0.1,forwardExtrudeMultiplier*profileSize,extrusionWidth]);
+    /*
+    difference() {
+        drawExtrusions(
+                    extrudeOffsetVal=wallSpacing, 
+                    oversize=0.2,
+                    disableIndents=true); 
+        drawExtrusions(
+                    extrudeOffsetVal=wallSpacing, 
+                    disableIndents=true);
     }
-    //color ("red", .5) 
-        drawExtrusions(extrudeOffsetVal=tolerance, withHoles=true);
-    //color ("green", .5) 
-        translate([(sectionCountDepth-1)*profileSize,0,0])
-        drawNema17(
-            nemaZOffset=-2, 
-            nema17Height=nema17Height,
-            drawHoles=true);
-};
+    difference() {
+        drawExtrusions(
+                    extrudeOffsetVal=wallSpacing, 
+                    oversize=2*wallSpacing+0.2,
+                    disableIndents=true); 
+        drawExtrusions(
+                    extrudeOffsetVal=wallSpacing, 
+                    oversize=2*wallSpacing,
+                    disableIndents=true);
+    }
+    */
+}
+
 /*
     color ("red", .5) drawExtrusions();
     color ("green", .5) drawNema17(
-        nemaZOffset=-2, 
+        nemaZOffset=nemaZOffset, 
         nema17Height=nema17Height,
         drawHoles=true);
 */
 
 
 
-translate([100,0,0]) 
+translate([100,0,0]) {
     color ("red", .5) drawExtrusions(withHoles=true);
+    //color ("green", .5) drawNema17(
+    //    nemaZOffset=nemaZOffset, 
+    //    nema17Height=nema17Height,
+    //    drawHoles=true);
+}
