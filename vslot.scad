@@ -1,12 +1,13 @@
-oversize = 0.8;
+oversize = 0.4;
 lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;
 sectionWidth=20;
+profileSize=20;
 
 testPiece=true;
 if (testPiece) {
-    zExtrusionLength = 100;
+    zExtrusionLength = 30;
     zExtrusionWidthSections = 2;
     zExtrusionDepthSections = 1;
     difference() {
@@ -34,10 +35,6 @@ if (testPiece) {
         );        
     };
 }
-    
-
-
-negativeSpaceHolePoints(fullIndentHeight=5,points=[[10,10],[20,20],[30,30]]);
 
 module extrusionIndent(_indentWidthInside, _indentWidthOutside, _indentHeight) {
     polygon(points=[
@@ -173,6 +170,99 @@ module negativeSpaceHoles(
          ]
             
     );
+}
+
+
+module drawVslotExtrusion(
+    height, 
+    sectionCountWidth, 
+    sectionCountDepth, 
+    topIndent=true, 
+    rightIndent=true, 
+    leftIndent=true, 
+    bottomIndent=true, 
+    oversize=0,
+    screwOffset=0,
+    leftScrewPoints = [],
+    //rightScrewPoints = [],
+    topScrewPoints = [],
+    bottomScrewPoints = [],
+    backScrewPoints = []
+    ) 
+{
+    linear_extrude(height=height) 
+        VSlot2dProfile(
+            sectionCountWidth=sectionCountWidth,
+            sectionCountDepth=sectionCountDepth,
+            topIndent=topIndent,
+            bottomIndent= bottomIndent,
+            leftIndent=leftIndent,
+            rightIndent=rightIndent,
+            oversize=oversize);
+    
+    if (len(topScrewPoints) > 0) {
+        points = [ 
+            for(i = [0:len(topScrewPoints)-1])
+            for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
+            [topScrewPoints[i],j]
+        ];
+            translate([0,-screwHeight+vslotIndentHeight,0])
+        negativeSpaceHolePoints(
+            largeHoleIndent = screwHeight-screwOffset,
+            fullIndentHeight=screwHeight,
+            points = points
+        );
+    };
+    if (len(bottomScrewPoints) > 0) {
+        points = [ 
+            for(i = [0:len(bottomScrewPoints)-1])
+            for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
+            [bottomScrewPoints[i],j]
+        ];
+            translate([0,screwHeight+sectionCountDepth*profileSize-vslotIndentHeight,sectionCountWidth*profileSize])
+            rotate([180,0,0])
+        negativeSpaceHolePoints(
+            largeHoleIndent = screwHeight-screwOffset,
+            fullIndentHeight=screwHeight+oversize,
+            points = points
+        );
+    };
+    if (len(leftScrewPoints) > 0) {
+        points = [ 
+            for(i = [0:len(leftScrewPoints)-1])
+            for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
+            [leftScrewPoints[i],j]
+        ];
+            translate([-screwHeight+vslotIndentHeight,0,0])
+            rotate([-90,-90,0])
+        negativeSpaceHolePoints(
+            largeHoleIndent = screwHeight-screwOffset,
+            fullIndentHeight=screwHeight+oversize,
+            points = points
+        );
+    };
+    if (len(backScrewPoints) > 0) {
+        points = [ 
+            for(i = [0:len(backScrewPoints)-1])
+            for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
+            [backScrewPoints[i],j]
+        ];
+            translate([0,sectionCountDepth*profileSize,-screwHeight+vslotIndentHeight])
+            rotate([90,0,0])
+        negativeSpaceHolePoints(
+            largeHoleIndent = screwHeight-screwOffset,
+            fullIndentHeight=screwHeight,
+            points = points
+        );
+    };
+    /*
+        translate([profileSize/2,0,0])
+        for(i = [0:len(leftScrewPoints)])
+        for(j=[0:profileSize:sectionCountDepth*profileSize]) {
+            translate([0,leftScrewPoints[i]],j) 
+                negativeSpaceHole(largeHoleHeight = screwHeight-screwOffset, fullIndentHeight = screwHeight);
+            }
+    */
 }
 
 
