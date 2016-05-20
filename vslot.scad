@@ -1,9 +1,4 @@
-oversize = 0.5;
-lengthHoleSpacing=20;
-wallWidth=5;
-vslotIndentHeight=1;
-sectionWidth=20;
-profileSize=20;
+include<constants.scad>;
 
 testPiece=true;
 if (testPiece) {
@@ -50,7 +45,7 @@ module VSlot2dProfile(
     sectionWidth = 20,
     indentWidthOutside = 9,
     indentWidthInside = 7,
-    indentHeight = 1,
+    indentHeight = vslotIndentHeight,
     sectionCountWidth,
     sectionCountDepth,
     topIndent = true,
@@ -111,8 +106,8 @@ module VSlot2dProfile(
 
 
 module negativeSpaceHole(
-    largeHoleHeight = 1,
-    fullIndentHeight = 6,
+    largeHoleIndent = largeHoleIndent,
+    fullIndentHeight = wallSpacing+vslotIndentHeight,
     largeHoleRadius = 5,
     smallHoleRadius = 2.5,
     )
