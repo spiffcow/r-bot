@@ -3,9 +3,10 @@ use <vslot.scad>;
 
 module motorMount(isLeft = true)
 {
+    wallSpacing=7;
     forwardExtrudeMultiplier = 2.5;
     screwHeight=vslotIndentHeight + wallSpacing;
-    screwOffset=wallSpacing;
+    screwOffset=screwHeight-3;
 
     module drawExtrusions(
         oversize=0,
