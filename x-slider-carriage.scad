@@ -4,7 +4,7 @@ sectionCountWidth=2;
 sectionCountDepth=1;
 wallWidth=4;
 screwDiameter=5;
-tolerance=0.8;
+tolerance=0.4;
 profileSize=20;
 
 holeDistWidth=68;

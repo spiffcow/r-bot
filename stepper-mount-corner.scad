@@ -1,26 +1,26 @@
 use <vslot.scad>;
 
+tolerance=0.4;
 profileSize=20;
 sectionCountWidth = 2;
 sectionCountDepth = 1;
 extrusionWidth=profileSize*sectionCountWidth;
 extrusionDepth=profileSize*sectionCountDepth;
 nema17Width = 42.3;
-nema17HoleRadius = 11.05;
+nema17HoleRadius = 11.05 + tolerance/2;
 nema17Height = 3.5*extrusionWidth;
 nema17BoltSpacing = 31;
 nema17BeltHoleHeight = 8;
 nema17BeltOffsetFromTopExtrusion = 8;
 nema17BeltHeightWidth = 15;
 wallSpacing=5;
-tolerance=0.4;
 vslotIndentHeight = 1;
 forwardExtrudeMultiplier = 2.5;
 screwHeight=vslotIndentHeight + wallSpacing;
 screwOffset=wallSpacing;
 
 rendering = true;
-supportWalls=true;
+supportWalls=false;
 
 module drawExtrusions(
     oversize=0,

@@ -1,4 +1,4 @@
-oversize = 0.4;
+oversize = 0.5;
 lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;
