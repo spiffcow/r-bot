@@ -3,20 +3,22 @@ use <vslot.scad>;
 testPiece = false;
 xExtrusionWidthSections = 2;
 xExtrusionDepthSections = 1;
-xExtrusionLength = 70;
+xExtrusionLength = 60;
 xEndClosed = true;
 yExtrusionWidthSections = 2;
 yExtrusionDepthSections = 1;
-yExtrusionLength = 70;
-yEndClosed = true;
-zExtrusionWidthSections = 2;
-zExtrusionDepthSections = 1;
+yExtrusionLength = 60;
+yEndClosed = false;
+zExtrusionWidthSections = 1;
+zExtrusionDepthSections = 2;
 zExtrusionLength = 90;
 zEndClosed = false;
 xyPlaneOffset = 20;
-oversize = 0.8;
+oversize = 0.4;
 lengthHoleSpacing=20;
-wallWidth=5;
+wallWidth=7;
+screwHeight=5;
+largeHoleIndent=wallWidth-screwHeight+1;
 vslotIndentHeight=1;
 sectionWidth=20;
 
@@ -86,7 +88,7 @@ module ThreeCornerVslot(
     zEndClosed = true,
     lengthHoleSpacing = 20,
     xyPlaneOffset = 20,
-    oversize = 0.8
+    oversize = 0.4
 )
 {
     xEndOffset = 
@@ -133,9 +135,11 @@ module ThreeCornerVslot(
                 indentHeight=vslotIndentHeight,
                 oversize=oversize
             );
-        };  
+        };
+        translate([0, 0, -xyPlaneOffset])  
         negativeSpaceHoles(
-            extrusionLength=zExtrusionLength,
+            extrusionLength=zExtrusionLength+xyPlaneOffset,
+            largeHoleIndent = largeHoleIndent,
             fullIndentHeight=wallWidth+vslotIndentHeight,
             firstIndentOffset=wallWidth,
             widthSections=zExtrusionWidthSections,
@@ -153,6 +157,7 @@ module ThreeCornerVslot(
                 );
             negativeSpaceHoles(
                 extrusionLength=xExtrusionLength,
+                largeHoleIndent = largeHoleIndent,
                 fullIndentHeight=wallWidth+vslotIndentHeight,
                 firstIndentOffset=wallWidth,
                 widthSections=xExtrusionWidthSections,
@@ -162,8 +167,10 @@ module ThreeCornerVslot(
             
         translate([zExtrusionWidthSections*sectionWidth+wallWidth*2,0,0])
         rotate([0,0,90])
+        translate([0, 0, -xyPlaneOffset])
             negativeSpaceHoles(
-                extrusionLength=zExtrusionLength,
+                extrusionLength=zExtrusionLength+xyPlaneOffset,
+                largeHoleIndent = largeHoleIndent,
                 fullIndentHeight=wallWidth+vslotIndentHeight,
                 firstIndentOffset=wallWidth,
                 widthSections=zExtrusionDepthSections,
@@ -195,6 +202,7 @@ module ThreeCornerVslot(
             rotate([0,90,90])
             negativeSpaceHoles(
                 extrusionLength=yExtrusionLength,
+                largeHoleIndent = largeHoleIndent,
                 fullIndentHeight=wallWidth+vslotIndentHeight,
                 firstIndentOffset=wallWidth,
                 widthSections=yExtrusionWidthSections,

@@ -177,9 +177,10 @@ module drawVslotExtrusion(
     leftIndent=true, 
     bottomIndent=true, 
     oversize=0,
+    screwHeight=screwHeight,
     screwOffset=0,
     leftScrewPoints = [],
-    //rightScrewPoints = [],
+    //rightScrewPoints = [], 
     topScrewPoints = [],
     bottomScrewPoints = [],
     backScrewPoints = []
@@ -212,9 +213,9 @@ module drawVslotExtrusion(
         points = [ 
             for(i = [0:len(bottomScrewPoints)-1])
             for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
-            [bottomScrewPoints[i],j]
+            [height-bottomScrewPoints[i],j]
         ];
-            translate([0,screwHeight+sectionCountDepth*profileSize-vslotIndentHeight,sectionCountWidth*profileSize])
+            translate([0,screwHeight+sectionCountDepth*profileSize-vslotIndentHeight,height])
             rotate([180,0,0])
         negativeSpaceHolePoints(
             largeHoleIndent = screwHeight-screwOffset,
@@ -225,11 +226,11 @@ module drawVslotExtrusion(
     if (len(leftScrewPoints) > 0) {
         points = [ 
             for(i = [0:len(leftScrewPoints)-1])
-            for(j=[profileSize/2:profileSize:sectionCountWidth*profileSize])
+            for(j=[profileSize/2:profileSize:sectionCountDepth*profileSize])
             [leftScrewPoints[i],j]
         ];
-            translate([-screwHeight+vslotIndentHeight,0,0])
-            rotate([-90,-90,0])
+            translate([-screwHeight+vslotIndentHeight,sectionCountDepth*profileSize,0])
+            rotate([0,0,-90])
         negativeSpaceHolePoints(
             largeHoleIndent = screwHeight-screwOffset,
             fullIndentHeight=screwHeight+oversize,
