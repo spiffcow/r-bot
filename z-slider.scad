@@ -1,22 +1,24 @@
 include<constants.scad>;
 use <vslot.scad>;
 
-xExtrusionWidthSections = 2;
-xExtrusionDepthSections = 1;
-xExtrusionLength = 60;
+xExtrusionWidthSections = 1;
+xExtrusionDepthSections = 2;
+xExtrusionLength = xExtrusionDepthSections * profileSize*2.5;
 xEndClosed = true;
-yExtrusionWidthSections = 2;
-yExtrusionDepthSections = 1;
-yExtrusionLength = 40;
+yExtrusionWidthSections = 1;
+yExtrusionDepthSections = 2;
+yExtrusionLength = yExtrusionDepthSections * profileSize*1.5;
 yEndClosed = false;
+sliderSpacing=5;
+sliderTolerance=0.6;
 
 wallWidth=7;
 screwHeight=wallWidth+vslotIndentHeight;
 screwOffset=5;
 
-PerpendicularBracket(avoidSupports=true);
+ZSliderBracket();
 
-module PerpendicularBracket(
+module ZSliderBracket(
     xExtrusionWidthSections = xExtrusionWidthSections,
     xExtrusionDepthSections = xExtrusionDepthSections,
     xExtrusionLength = xExtrusionLength,
@@ -25,7 +27,7 @@ module PerpendicularBracket(
     yExtrusionLength = yExtrusionLength,
     lengthHoleSpacing = profileSize,
     tolerance = tolerance,
-    avoidSupports = false,
+    sliderTolerance = sliderTolerance
 )
 {
     difference() {
@@ -42,7 +44,7 @@ module PerpendicularBracket(
                 leftIndent = false,
                 oversize = wallWidth*2
             );
-            translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, 0, 0])
+            translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, -sliderSpacing, 0])
             rotate([90,90,0])
             drawVslotExtrusion(
                 height=yExtrusionLength,
@@ -61,14 +63,12 @@ module PerpendicularBracket(
             height=xExtrusionLength,
             sectionCountWidth=xExtrusionWidthSections, 
             sectionCountDepth=xExtrusionDepthSections,
-            oversize=tolerance,
-            rightIndent=!avoidSupports,
-            leftScrewPoints = [profileSize/2, xExtrusionLength-profileSize/2],
-            bottomScrewPoints = [profileSize/2, xExtrusionLength-profileSize/2],
+            oversize=sliderTolerance,
             screwOffset = screwOffset,
-            screwHeight=screwHeight
+            screwHeight=screwHeight,
+            bottomIndent = false
         );
-        translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, vslotIndentHeight, 0])
+        translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, -sliderSpacing, 0])
         rotate([90,90,0])
         drawVslotExtrusion(
             height=yExtrusionLength+vslotIndentHeight,
@@ -76,14 +76,14 @@ module PerpendicularBracket(
             sectionCountDepth=yExtrusionDepthSections,
             rightIndent=!avoidSupports,
             leftScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
-            bottomScrewPoints = [yExtrusionLength-profileSize/2],
-            topScrewPoints = [yExtrusionLength-profileSize/2],
+            rightScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
+            bottomScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
+            topScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
             oversize=tolerance,
             screwOffset = screwOffset,
             screwHeight=yExtrusionLength/2
         );
     }
-    
     
 }
         
