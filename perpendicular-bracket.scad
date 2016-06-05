@@ -14,7 +14,7 @@ wallWidth=7;
 screwHeight=wallWidth+vslotIndentHeight;
 screwOffset=5;
 
-PerpendicularBracket(avoidSupports=true);
+PerpendicularBracket(avoidSupports=false);
 
 module PerpendicularBracket(
     xExtrusionWidthSections = xExtrusionWidthSections,

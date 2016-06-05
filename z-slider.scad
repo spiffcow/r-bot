@@ -3,14 +3,15 @@ use <vslot.scad>;
 
 xExtrusionWidthSections = 1;
 xExtrusionDepthSections = 2;
-xExtrusionLength = xExtrusionDepthSections * profileSize*2.5;
+xExtrusionLength = xExtrusionDepthSections * profileSize*2;
 xEndClosed = true;
 yExtrusionWidthSections = 1;
 yExtrusionDepthSections = 2;
-yExtrusionLength = yExtrusionDepthSections * profileSize*1.5;
+yExtrusionLength = yExtrusionDepthSections * profileSize*1;
 yEndClosed = false;
 sliderSpacing=5;
-sliderTolerance=0.6;
+sliderTolerance=0.4;
+tolerance=0.3;
 
 wallWidth=7;
 screwHeight=wallWidth+vslotIndentHeight;
@@ -44,7 +45,7 @@ module ZSliderBracket(
                 leftIndent = false,
                 oversize = wallWidth*2
             );
-            translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, -sliderSpacing, 0])
+            translate([wallWidth, -sliderSpacing, 0])
             rotate([90,90,0])
             drawVslotExtrusion(
                 height=yExtrusionLength,
@@ -68,17 +69,15 @@ module ZSliderBracket(
             screwHeight=screwHeight,
             bottomIndent = false
         );
-        translate([(xExtrusionLength-profileSize*yExtrusionDepthSections)/2, -sliderSpacing, 0])
+        translate([wallWidth, -sliderSpacing, 0])
         rotate([90,90,0])
         drawVslotExtrusion(
             height=yExtrusionLength+vslotIndentHeight,
             sectionCountWidth=yExtrusionWidthSections, 
             sectionCountDepth=yExtrusionDepthSections,
             rightIndent=!avoidSupports,
-            leftScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
-            rightScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
-            bottomScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
-            topScrewPoints = [profileSize/2, yExtrusionLength-profileSize/2],
+            leftScrewPoints = [yExtrusionLength-profileSize/2],
+            rightScrewPoints = [yExtrusionLength-profileSize/2],
             oversize=tolerance,
             screwOffset = screwOffset,
             screwHeight=yExtrusionLength/2

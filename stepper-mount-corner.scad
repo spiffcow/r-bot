@@ -85,8 +85,8 @@ module motorMount(isLeft = true)
     module drawNema17(extrudeOffsetVal=0, nemaZOffset, drawHoles=false) {
         nema17BoltOffset = (nema17Width - nema17BoltSpacing)/2;
         
-        // from Carl Feniak's drawing
-        nema17BeltHoleCenterOffsetX = -1;
+        // from Carl Feniak's drawing..  
+        nema17BeltHoleCenterOffsetX = -3;// was -1, deviating from the description based on visual assessment
         nema17BeltHoleCenterOffsetZ = wallSpacing + 9;
         nema17BeltHoleWidth = 16;
         nema17BeltHoleHeight = 8;
@@ -128,7 +128,6 @@ module motorMount(isLeft = true)
         }
     }
 
-    wallSpacing=5;
     nema17Height=2.5*extrusionWidth-(isLeft ? 0 : 20);
     nemaZOffset = -4;
 

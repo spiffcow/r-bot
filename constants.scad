@@ -1,5 +1,5 @@
-tolerance=0.4;
-oversize = 0.5;
+tolerance=0.3;
+oversize = 0.3;
 lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;
@@ -17,3 +17,4 @@ nema17BeltHoleHeight = 8;
 nema17BeltOffsetFromTopExtrusion = 8;
 nema17BeltHeightWidth = 15;
 wallSpacing=5;
+screwHeight = wallSpacing+vslotIndentHeight;
