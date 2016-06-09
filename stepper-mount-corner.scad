@@ -45,10 +45,10 @@ module motorMount(isLeft = true)
             );
             }
             extrusionWidthPoints = withHoles 
-                ? [for (x = [profileSize/2:profileSize:extrusionWidth]) x] 
+                ? [for (x = [profileSize/2,extrusionWidth-profileSize/2]) x] 
                 : [];
             extrusionDepthPoints = withHoles 
-                ? [for (x = [profileSize/2:profileSize:extrusionDepth]) x] 
+                ? [for (x = [profileSize/2,extrusionDepth-profileSize/2]) x] 
                 : [];
             ybarPoints = withHoles 
                 ? [for (x = [profileSize/2: profileSize:(forwardExtrudeMultiplier-1.5)*sectionCountDepth*profileSize]) x] 
@@ -56,22 +56,14 @@ module motorMount(isLeft = true)
             drawExtrusion(
                 height=extrusionWidth, 
                 topScrewPoints=extrusionWidthPoints,
-                leftScrewPoints=extrusionDepthPoints,
-                rightIndent=false
+                leftScrewPoints=extrusionWidthPoints
             );
-            translate([0,0,extrusionWidth])
-                drawExtrusion(
-                    height=extrusionWidth, 
-                    rightIndent=false, 
-                    topScrewPoints=extrusionWidthPoints,
-                    leftScrewPoints=extrusionDepthPoints
-                );
             translate([extrusionWidth,0,2*extrusionWidth]) rotate([0,90,0])  
                 drawExtrusion(
                     height=extrusionWidth, 
                     topScrewPoints=extrusionWidthPoints
                );
-            translate([0,-extrudeOffsetVal,2*extrusionWidth]) rotate(-[90,90,0]) {
+            translate([0,-extrudeOffsetVal,extrusionWidth]) rotate(-[90,90,0]) {
                 // first do the short portion over the top with no indent
                 drawExtrusion(height=extrusionDepth+extrudeOffsetVal, leftIndent=false, topIndent=false,
                     topScrewPoints=extrusionDepthPoints,
@@ -86,8 +78,8 @@ module motorMount(isLeft = true)
         nema17BoltOffset = (nema17Width - nema17BoltSpacing)/2;
         
         // from Carl Feniak's drawing..  
-        nema17BeltHoleCenterOffsetX = -3;// was -1, deviating from the description based on visual assessment
-        nema17BeltHoleCenterOffsetZ = wallSpacing + 9;
+        nema17BeltHoleCenterOffsetX = profileSize/2 + 12;//-5;// was -1, deviating from the description based on visual assessment
+        nema17BeltHoleCenterOffsetZ = 14;
         nema17BeltHoleWidth = 16;
         nema17BeltHoleHeight = 8;
         m3HoleRadius = 1.5;
@@ -115,7 +107,7 @@ module motorMount(isLeft = true)
                 }
                 // belt hole
                 translate([
-                    wallSpacing+nema17Width/2 + nema17BeltHoleCenterOffsetX, 
+                    nema17BeltHoleCenterOffsetX, 
                     wallSpacing+nema17Width,
                     nema17Height+nema17BeltHoleCenterOffsetZ
                 ]) cube([
@@ -128,13 +120,13 @@ module motorMount(isLeft = true)
         }
     }
 
-    nema17Height=2.5*extrusionWidth-(isLeft ? 0 : 20);
+    nema17Height=1.5*extrusionWidth-(isLeft ? 0 : 20);
     nemaZOffset = -4;
 
     module drawNema17Platform() {
         translate([(sectionCountDepth-1)*profileSize,0,0])
         hull() {
-            translate([-wallSpacing,0, wallSpacing + nemaZOffset])
+            translate([-wallSpacing,-wallSpacing, 0])
                 linear_extrude(height=wallSpacing)
                 square([nema17Width+wallSpacing,0.001], center=false);
             
@@ -186,7 +178,7 @@ module motorMount(isLeft = true)
 
 rendering = true;
 
-motorMount(isLeft = false);
+motorMount(isLeft = true);
 
 if (!rendering)
 {

@@ -6,6 +6,7 @@ wallWidth=4;
 screwDiameter=5;
 tolerance=0.4;
 profileSize=20;
+sideNum = 1;
 
 holeDistWidth=68;
 holeDistHeight=51.9;
@@ -49,15 +50,21 @@ difference() {
             //bottomScrewPoints = [],
             //backScrewPoints = []
     );
-    linear_extrude(h=cubeZ) 
-        polygon(points=[
-            [0,wallWidth-tolerance/2], 
-            [(cubeX-(sectionCountWidth*profileSize))/2-tolerance/2,wallWidth-tolerance/2],
-            [cubeX-(cubeX-(sectionCountWidth*profileSize))/2+tolerance/2,blockWidth-wallWidth+tolerance/2],
-            [cubeX+tolerance/2, blockWidth-wallWidth+tolerance/2],
-            [cubeX+tolerance/2, blockWidth+tolerance/2],
-            [0, blockWidth]
-        ]);
+    translate([0,0,15])
+        cube([10,blockWidth,44]);
+    
+    translate ([sideNum == 1 ? 0 : cubeX, 0, 0])
+    mirror([sideNum == 1 ? 0 : 1, 0, 0]) {
+        linear_extrude(h=cubeZ) 
+            polygon(points=[
+                [0,wallWidth-tolerance/2], 
+                [(cubeX-(sectionCountWidth*profileSize))/2-tolerance/2,wallWidth-tolerance/2],
+                [cubeX-(cubeX-(sectionCountWidth*profileSize))/2+tolerance/2,blockWidth-wallWidth+tolerance/2],
+                [cubeX+tolerance/2, blockWidth-wallWidth+tolerance/2],
+                [cubeX+tolerance/2, blockWidth+tolerance/2],
+                [0, blockWidth]
+            ]);
+    }
     /*
     translate([-(holeDistHeight-blockHeight)/2+holeDistHeight, 0, cylinderRadius])
         rotate([-90,0,0])
@@ -67,3 +74,6 @@ difference() {
         cylinder(r=cylinderRadius,h=blockWidth, $fn=90);
     */
 }
+
+
+
