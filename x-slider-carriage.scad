@@ -6,7 +6,7 @@ wallWidth=4;
 screwDiameter=5;
 tolerance=0.4;
 profileSize=20;
-sideNum = 1;
+sideNum = 2;
 
 holeDistWidth=68;
 holeDistHeight=51.9;
@@ -15,6 +15,7 @@ blockWidth = wallWidth*2 + sectionCountDepth*profileSize;
 cubeX = holeDistHeight+screwDiameter+2*wallWidth;
 cubeZ = holeDistWidth+screwDiameter+2*wallWidth;
 
+mirror([sideNum == 1 ? 0 : 1, 0, 0])
 difference() {
     cube([cubeX,blockWidth,cubeZ]);
     translate([wallWidth+screwDiameter/2, 0, wallWidth+screwDiameter/2])
