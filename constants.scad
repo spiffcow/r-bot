@@ -1,5 +1,5 @@
-tolerance=0.3;
-oversize = 0.3;
+tolerance=0.7;
+oversize = 0.7;
 lengthHoleSpacing=20;
 wallWidth=5;
 vslotIndentHeight=1;

@@ -2,7 +2,7 @@ include<constants.scad>;
 
 testPiece=true;
 if (testPiece) {
-    zExtrusionLength = 30;
+    zExtrusionLength = 15;
     zExtrusionWidthSections = 2;
     zExtrusionDepthSections = 1;
     difference() {
@@ -20,14 +20,14 @@ if (testPiece) {
                 oversize=oversize
             );
         }; 
-        
+        /*
         negativeSpaceHoles(
             extrusionLength=zExtrusionLength,
             fullIndentHeight=wallWidth+vslotIndentHeight,
             firstIndentOffset=wallWidth,
             widthSections=zExtrusionWidthSections,
             lengthHoleSpacing=lengthHoleSpacing
-        );        
+        );*/        
     };
 }
 

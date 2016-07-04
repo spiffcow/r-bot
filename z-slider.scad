@@ -3,19 +3,19 @@ use <vslot.scad>;
 
 xExtrusionWidthSections = 1;
 xExtrusionDepthSections = 2;
-xExtrusionLength = xExtrusionDepthSections * profileSize*2;
 xEndClosed = true;
 yExtrusionWidthSections = 1;
 yExtrusionDepthSections = 2;
-yExtrusionLength = yExtrusionDepthSections * profileSize*1;
 yEndClosed = false;
 sliderSpacing=5;
-sliderTolerance=0.4;
-tolerance=0.3;
-
+sliderTolerance=0.8;
+tolerance=0.6;
 wallWidth=7;
-screwHeight=wallWidth+vslotIndentHeight;
 screwOffset=5;
+
+xExtrusionLength = xExtrusionDepthSections * profileSize*2;//profileSize*1 + 2*wallWidth;
+yExtrusionLength = yExtrusionDepthSections * profileSize*1;
+screwHeight=wallWidth+vslotIndentHeight;
 
 ZSliderBracket();
 
@@ -67,7 +67,8 @@ module ZSliderBracket(
             oversize=sliderTolerance,
             screwOffset = screwOffset,
             screwHeight=screwHeight,
-            bottomIndent = false
+            bottomIndent = false,
+            topIndent = false
         );
         translate([wallWidth, -sliderSpacing, 0])
         rotate([90,90,0])
