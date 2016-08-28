@@ -9,11 +9,11 @@ yExtrusionDepthSections = 2;
 yEndClosed = false;
 sliderSpacing=5;
 sliderTolerance=0.8;
-tolerance=0.6;
-wallWidth=7;
+tolerance=0.9;
+wallWidth=5;
 screwOffset=5;
 
-xExtrusionLength = xExtrusionDepthSections * profileSize*2;//profileSize*1 + 2*wallWidth;
+xExtrusionLength = xExtrusionDepthSections * profileSize*1 + 2*wallWidth;
 yExtrusionLength = yExtrusionDepthSections * profileSize*1;
 screwHeight=wallWidth+vslotIndentHeight;
 
@@ -67,7 +67,6 @@ module ZSliderBracket(
             oversize=sliderTolerance,
             screwOffset = screwOffset,
             screwHeight=screwHeight,
-            bottomIndent = false,
             topIndent = false
         );
         translate([wallWidth, -sliderSpacing, 0])

@@ -43,8 +43,6 @@ module extrusionIndent(_indentWidthInside, _indentWidthOutside, _indentHeight) {
 module VSlot2dProfile(
     extrusionLength,
     sectionWidth = 20,
-    indentWidthOutside = 9,
-    indentWidthInside = 7,
     indentHeight = vslotIndentHeight,
     sectionCountWidth,
     sectionCountDepth,

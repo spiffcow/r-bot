@@ -178,7 +178,7 @@ module motorMount(isLeft = true)
 
 rendering = true;
 
-motorMount(isLeft = true);
+motorMount(isLeft = false);
 
 if (!rendering)
 {
