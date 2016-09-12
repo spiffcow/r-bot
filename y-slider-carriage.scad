@@ -22,7 +22,24 @@ cubeX = holeDistHeight+screwDiameter+2*wallWidth;
 cubeZ = holeDistWidth+screwDiameter+2*wallWidth;
 
 difference() {
-    cube([cubeX,blockWidth,cubeZ]);
+    hull() {
+        translate([wallWidth+screwDiameter/2, 0, wallWidth+screwDiameter/2])
+        {
+            rotate([-90,0,0])
+                cylinder(r=wallWidth+screwDiameter/2,h=blockWidth, $fn=90);
+            translate([0, 0, holeDistWidth])
+                rotate([-90,0,0])
+                cylinder(r=wallWidth+screwDiameter/2,h=blockWidth, $fn=90);
+        }
+        translate([wallWidth+screwDiameter/2 + holeDistHeight, 0, wallWidth+screwDiameter/2])
+        {
+            rotate([-90,0,0])
+                cylinder(r=wallWidth+screwDiameter/2,h=blockWidth, $fn=90);
+            translate([0, 0, holeDistWidth])
+                rotate([-90,0,0])
+                cylinder(r=wallWidth+screwDiameter/2,h=blockWidth, $fn=90);
+        }
+    };
     translate([wallWidth+screwDiameter/2, 0, wallWidth+screwDiameter/2])
     {
         rotate([-90,0,0])

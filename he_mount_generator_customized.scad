@@ -56,7 +56,7 @@ use<delta_blower_fans.scad>;
 carriage = "cbot"; // [cbot:C Bot style, prusai3:Prusa i3]
 
 // Which hot end is in use. Ensure you enter height from top of mount to tip of nozzle if you select generic J Head.
-hotend = "e3d_v6_vol"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volcano, cyclops:Cyclops, e3d_v6:E3D V6, e3d_v6_vol:E3D V6 w/ Volcano, jhead_mkv:J Head Mark V, hexagon:Hexagon, gen_jhead:Generic J Head]
+hotend = "e3d_v6"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volcano, cyclops:Cyclops, e3d_v6:E3D V6, e3d_v6_vol:E3D V6 w/ Volcano, jhead_mkv:J Head Mark V, hexagon:Hexagon, gen_jhead:Generic J Head]
 
 // What style of extruder are you using?
 extruder = "titan"; // [bowden:Bowden, titan:E3D Titan, carl_direct:Carl Feniak Direct Drive - Not ready yet.]
@@ -98,7 +98,7 @@ explodeParts = 1; // [1:Yes, 0:No]
 // all = All parts
 
 // Which Prusa i3 part should be exported.
-prusai3Which = "all"; // [hotm:Back Plane & Cold / Hot End  Mount, jhead_col: J Head Style Collar, servo:Servo Bracket, fanm:Fan Mount, fant:Fan Bracket, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, bltouch:BL Touch, all:All Parts ] 
+prusai3Which = "hotm"; // [hotm:Back Plane & Cold / Hot End  Mount, jhead_col: J Head Style Collar, servo:Servo Bracket, fanm:Fan Mount, fant:Fan Bracket, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, bltouch:BL Touch, all:All Parts ] 
 
 // How wide to make the X Carriage back plane.
 xMountWidth = 40;
@@ -170,10 +170,10 @@ prusai3FanBracketDepth = 3;
 
 
 // Which C Botpart should be exported.
-cBotWhich = "hotm"; // [hotm:Carriage with Cold / Hot End  Mount, carrside: Carriage Side, jhead_col:J Head Style Collar, belth:Belt Holder, servo:Servo Bracket, fant:Fan Mount Bracket, fanm:Fan Mount, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, xbump:X Endstop Bumper, bltouch:BL Touch, all:All Parts] 
+cBotWhich = "all"; // [hotm:Carriage with Cold / Hot End  Mount, carrside: Carriage Side, jhead_col:J Head Style Collar, belth:Belt Holder, servo:Servo Bracket, fant:Fan Mount Bracket, fanm:Fan Mount, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, xbump:X Endstop Bumper, bltouch:BL Touch, all:All Parts] 
 
 // Do you want a carriage mount axis limit switch?
-cBotXAxisSwitch = "gen"; // [yl99:YL-99, keyes:Keyes, gen:Generic Mini Switch, none:None]
+cBotXAxisSwitch = "cheap"; // [yl99:YL-99, keyes:Keyes, gen:Generic Mini Switch, cheap:Cheapo, none:None]
 
 // Which side should have the endstop mount?
 cBotXAxisSwitchSide = "acc"; // [he:Hot End, acc:Accessory, both:Both]
@@ -203,7 +203,7 @@ cBotCarriageDepth = 6;
 cBotCarriageSlider = true;
 
 // extra space around extrusion
-vslotOversize = 0.8;
+vslotOversize = 0.7;
 
 // Diameter of screw holes for carriage idler wheels.
 cBotCarriageIdlerScrewDiameter = 5.0;
@@ -417,10 +417,10 @@ zProbeSwitchActivationDistance = 5;
 inductMountDistance = 8;
 
 // Diameter of sensor.
-inductDiameter = 12.6;
+inductDiameter = 18.6;
 
 // Amount of material around sensor, account for nuts and washers around the sensor.
-inductMat = 5;
+inductMat = 8;
 
 // Height of mount plate above nozzle tip.
 inductPlateHeight = 25;
@@ -551,7 +551,7 @@ genericJHeadNozzleL = [[0, 0, -genJHeadHeight]]; // This must be a vector of vec
 /* [E3D Titan Extruder Advanced] */
 
 // Variables for E3D Titan extruder.
-e3dTitanOffset = [11.1,13.5]; // This is offset of the filament path. 0 - From center of stepper shaft, 1 - From face of carrier / mount. Do not change.
+e3dTitanOffset = [0,13.5]; // This is offset of the filament path. 0 - From center of stepper shaft, 1 - From face of carrier / mount. Do not change.
 e3dTitanMountThickness = 6; // [2:2 MM, 5:5 MM]
 e3dTitanMountMat = 3; // How much material should be around the face of the mount.
 e3dTitanMountCornerRadius = 4; // The radius of the corners for the mounting plate.
@@ -662,8 +662,8 @@ cBotBeltScrewDistance = 3;
 cBotBeltScrewNutDiameter = 6.5;
 cBotBeltScrewNutDepth = -0.3;
 cBotBeltHolderHeight = 19;
-cBotBeltHolderDepth = 3;
-cBotBeltHolderNubDepth = 2;
+cBotBeltHolderDepth = 4;
+cBotBeltHolderNubDepth = 3;
 cBotBeltHolderNubHeight = 6.2;
 cBotBeltHolderCornerRadius = 1;
 cBotCenterHoleDiameter = 25;
@@ -690,6 +690,10 @@ cBotXBumperDepth = 3; // How thick to make the bumper.
 cBotXBumperHolePos = [10,5]; // Where the hole is in relation to the bottom of the bumper.
 
 /* [Hidden] */
+
+
+
+
 realZProbeSide = (carriage == "prusai3" && extruder == "titan" ? "left" : zProbeSide);
 inductMountWidth = inductDiameter + (probeBraceWidth * 2) + (inductMat * 2);
 cBotProbePos = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") ? chiCBotProbePos : jHeadCBotProbePos; // Used the correct location of the probe mount based on hotend type.
@@ -1440,6 +1444,15 @@ module jhead_mount(carriageDepth) {
 
 	  jhead_holes(carriageDepth);
      }
+     
+     
+// C-Bot extruder
+/*
+rotate([90,180,0])
+mirror([1,0,0])
+translate([-95,-179 - cBotCarriageHeight,-jHeadMountDepth])
+    import("C-Bot Bowden Filament Drive (x1).stl",convexivity=3);
+*/     
 }
 
 
@@ -3172,3 +3185,14 @@ module bltouch_mount(carriageDepth,cbot=false) {
 	  }
      }
 }
+
+            if (cBotXAxisSwitch == "cheap")
+            {
+                translate([-6, 22, 70])
+                rotate([-90,-90,0]) 
+                mirror([1,0,0])
+                difference() {
+                    rotate([0,0,270]) color("red") import("C-BOT Y Endstop Holder (x1).stl");
+                    translate([-10, -30, -1]) cube([50,21,20]);
+                }
+            }
