@@ -62,7 +62,7 @@ hotend = "e3d_v6"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volc
 extruder = "titan"; // [bowden:Bowden, titan:E3D Titan, carl_direct:Carl Feniak Direct Drive - Not ready yet.]
 
 // What type of fan duct should be made?
-fanDuctStyle = "classic"; // [Full:Full 360 duct, classic:Simple single outlet]
+fanDuctStyle = "full"; // [Full:Full 360 duct, classic:Simple single outlet]
 
 // Which Z Probe type is in use. Select Servo here if you want to if you Servo Bracket selected above, otherwise it won't appear.
 servoInduct = "induct"; // [servo:Servo w/ Arm, induct:Inductive / Capacitive Sensor, bltouch:BL Touch, none:Neither/None]

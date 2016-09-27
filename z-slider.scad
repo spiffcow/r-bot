@@ -67,7 +67,7 @@ module ZSliderBracket(
             oversize=sliderTolerance,
             screwOffset = screwOffset,
             screwHeight=screwHeight,
-            topIndent = false
+            bottomIndent = false
         );
         translate([wallWidth, -sliderSpacing, 0])
         rotate([90,90,0])

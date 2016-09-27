@@ -14,7 +14,7 @@ wallWidth=7;
 screwOffset=5;
 slideHeight = profileSize - 5.5;
 
-xExtrusionLength = 3 * profileSize*1 + 2*wallWidth;
+xExtrusionLength = 2 * profileSize*1 + 2*wallWidth;
 yExtrusionLength = yExtrusionDepthSections * profileSize*2/3;
 screwHeight=wallWidth+vslotIndentHeight;
 
